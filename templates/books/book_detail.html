@@ -1,0 +1,26 @@
+{% include "header.html" %}
+
+<h2>{{ book.title }}</h2>
+<p><strong>Автор:</strong> {{ book.author }}</p>
+<p>{{ book.description }}</p>
+
+<h3>Отзывы:</h3>
+<ul>
+    {% for r in reviews %}
+        <li>
+            <strong>Оценка:</strong> {{ r.rating }}<br>
+            {{ r.text|truncatechars:200 }}
+        </li>
+    {% empty %}
+        <li>Отзывов пока нет</li>
+    {% endfor %}
+</ul>
+
+<h3>Оставить отзыв</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+
+{% include "footer.html" %}

@@ -1,10 +1,28 @@
-from django.shortcuts import render, get_object_or_404
-from .models import WriterQuotes
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from .models import Book
+from .forms import ReviewForm
+import datetime
 
-def writer_list(request):
-    writers = WriterQuotes.objects.all()
-    return render(request, "books/writer_list.html", {"writers": writers})
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'books/book_list.html', {"books": books})
 
-def writer_detail(request, pk):
-    writer = get_object_or_404(WriterQuotes, pk=pk)
-    return render(request, "books/writer_detail.html", {"writer": writer})
+def book_detail(request, id):
+    book = get_object_or_404(Book, id=id)
+    reviews = book.reviews.order_by("-created_at")
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.book = book
+            review.full_clean()
+            review.save()
+            return redirect("book_detail", id=book.id)
+    else:
+        form = ReviewForm()
+    return render(request, "books/book_detail.html", {"book": book, "reviews": reviews, "form": form})
+
+def current_time(request):
+    now = datetime.datetime.now()
+    return HttpResponse(f"<h1>Текущее время: {now.strftime('%Y-%m-%d %H:%M:%S')}</h1>")

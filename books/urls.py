@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import writer_list, writer_detail
+from . import views
 
 urlpatterns = [
-    path('', writer_list, name='writer_list'),
-    path('<int:pk>/', writer_detail, name='writer_detail'),
+    path('', views.book_list, name='book_list'),
+    path('<int:id>/', views.book_detail, name='book_detail'),
+    path('time/', views.current_time, name='current_time'),
 ]

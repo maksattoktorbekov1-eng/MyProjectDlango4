@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import RedirectView
+from books import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('writers/', include('books.urls')),
-    path('', RedirectView.as_view(url='/writers/')),  # корень → список писателей
+    path('', views.book_list, name='book_list'),
+    path('books/', include('books.urls')),
+    path('time/', views.current_time, name='current_time'),
 ]
