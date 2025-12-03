@@ -1,9 +1,7 @@
 from django.urls import path
-from . import views
+from .views import writer_list, writer_detail
 
 urlpatterns = [
-    path('',views.writers_view, name='home'),   
-    path('writers/', views.writers_view, name='writers'),
-    path('quotes/', views.quotes_view, name='quotes'),
-    path('time/', views.time_view, name='time'),
+    path('', writer_list, name='writer_list'),
+    path('<int:pk>/', writer_detail, name='writer_detail'),
 ]
